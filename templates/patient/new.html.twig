@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Patient{% endblock %}
+
+{% block content %}
+<div class="row mt-5">
+    <div class="col-6 offset-3">
+        <h2>Ajouter un Patient</h2>
+        {{ include('patient/_form.html.twig') }}        
+    </div>
+</div>
+{% endblock %}

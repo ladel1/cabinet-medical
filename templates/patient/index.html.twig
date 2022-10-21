@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste patients{% endblock %}
+
+{% block content %}
+
+<div class="row mt-5 text-center">
+    <h2>Liste patients</h2>
+</div>            
+
+<div class="row mt-5">        
+    <div class="col-8 offset-2">
+        <table class="table table-primary">
+            <thead>
+                <tr>
+                    <th>N°</th>
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>Age</th>
+                    <th>Civilite</th>
+                    <th>Nss</th>
+                    <th>Adresse</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for patient in patients %}
+                <tr>
+                    <td>{{ patient.id }}</td>
+                    <td>{{ patient.nom }}</td>
+                    <td>{{ patient.prenom }}</td>
+                    <td>{{ patient.age }}</td>
+                    <td>{{ patient.civilite }}</td>
+                    <td>{{ patient.nss }}</td>
+                    <td>{{ patient.adresse }}</td>
+                    <td>{{ patient.email }}</td>
+                    <td>
+                        <a class="btn btn-primary" href="{{ path('app_patient_show', {'id': patient.id}) }}"><i class="fa-solid fa-eye"></i></a>
+                        <a class="btn btn-success" href="{{ path('app_patient_edit', {'id': patient.id}) }}"><i class="fa-solid fa-pen-to-square"></i></a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="9">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>    
+{% endblock %}

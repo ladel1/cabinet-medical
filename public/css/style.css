@@ -1,0 +1,16 @@
+main {
+    min-height: 85vh;
+}
+footer {
+    padding: 26px;
+    text-align: center;
+    background: #404345;
+    color: #fff;
+    font-weight: 600;
+}
+  
+.margin-top-5{
+    margin-top: 50px;
+}
+
+
