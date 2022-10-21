@@ -1,11 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Medecin{% endblock %}
+{% block title %}Ajouter un Medecin{% endblock %}
 
-{% block body %}
-    <h1>Create new Medecin</h1>
-
-    {{ include('medecin/_form.html.twig') }}
-
-    <a href="{{ path('app_medecin_index') }}">back to list</a>
+{% block content %}
+<div class="row mt-5">
+    <div class="col-6 offset-3">
+        <h1>Ajouter un medecin</h1>
+        {{ include('medecin/_form.html.twig', {'button_label': 'Ajouter'}) }}
+    </div>
+</div>
 {% endblock %}

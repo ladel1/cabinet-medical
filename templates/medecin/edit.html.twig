@@ -1,13 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Medecin{% endblock %}
+{% block title %}Modifier un medecin{% endblock %}
 
-{% block body %}
-    <h1>Edit Medecin</h1>
-
-    {{ include('medecin/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_medecin_index') }}">back to list</a>
-
-    {{ include('medecin/_delete_form.html.twig') }}
+{% block content %}
+    <div class="row mt-5">
+        <div class="col-6 offset-3">
+            <h1>Modifier un medecin</h1>
+        
+            {{ include('medecin/_form.html.twig', {'button_label': 'Modifier'}) }}
+            {{ include('medecin/_delete_form.html.twig') }}
+        </div>
+    </div>
 {% endblock %}

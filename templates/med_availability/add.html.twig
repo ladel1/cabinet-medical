@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter les disponiblités{% endblock %}
+
+{% block content %}
+<div class="row mt-5 text-center">
+    <h2>Ajouter disponiblités pour {{medecin.nom}}</h2>
+</div>
+<div class="row mt-5 text-center">
+    <div class="col-2 offset-5">
+        <div class="form-group">
+            <label for="">Date</label>
+            <input type="date" class="form-control">
+        </div>
+    </div>
+</div>
+<div class="row mt-5">
+    <div class="col-8 offset-2">
+        <table class="table table-primary">
+            <thead>
+                <tr>
+                    {% for jour in jours %}
+                        <th>
+                            {{jour}}
+                        </th>
+                    {% endfor %}
+                </tr>            
+            </thead>
+            <tbody>
+                {% for heure in heures %}
+                    <tr>
+                        {% for jour in jours %}
+                            <td>
+                                {{ heure }}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

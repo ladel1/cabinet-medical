@@ -26,7 +26,7 @@ class MedecinController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="app_medecin_new", methods={"GET", "POST"})
+     * @Route("/ajouter", name="app_medecin_new", methods={"GET", "POST"})
      */
     public function new(Request $request, MedecinRepository $medecinRepository): Response
     {
@@ -57,7 +57,7 @@ class MedecinController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="app_medecin_edit", methods={"GET", "POST"})
+     * @Route("/{id}/modifier", name="app_medecin_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Medecin $medecin, MedecinRepository $medecinRepository): Response
     {

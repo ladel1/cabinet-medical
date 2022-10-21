@@ -1,0 +1,46 @@
+<div class="row mt-5">
+    <div class="col-6 offset-3">
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+            
+
+            <div class="mb-3 row">
+                <label class="col-form-label col-sm-2 required" for="rendez_vous_medecin">Semaine</label>
+                <div class="col-sm-10">
+                    <input type="week" id="week" class="form-control" name="" id="">
+               </div>
+            </div>
+
+            {% set jours = ["Lu","Ma","Me","Je","Ve"] %}
+            {% set heures = ["09h00-09h30","09h30-10h00","10h00-10h30","10h30-11h00","11h00-11h30"] %}
+        
+
+                    <table id="dispo" class="table table-primary mt-3">
+                        <thead>
+                            <tr>
+                                {% for jour in jours %}
+                                    <th>
+                                        {{jour}}
+                                    </th>
+                                {% endfor %}
+                            </tr>            
+                        </thead>
+                        <tbody>
+                            {% for heure in heures %}
+                                <tr>
+                                    {% for jour in jours %}
+                                        <td>
+                                            {{ heure }}
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+           
+            <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+        {{ form_end(form) }}
+    </div>
+</div>
+
+ 
