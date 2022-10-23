@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\RendezVous;
 use App\Form\RendezVousType;
+use App\Repository\AvailabilityRepository;
 use App\Repository\RendezVousRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class RendezVousController extends AbstractController
 {
+
     /**
      * @Route("/", name="app_rendez_vous_index", methods={"GET"})
      */
@@ -26,7 +28,21 @@ class RendezVousController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="app_rendez_vous_new", methods={"GET", "POST"})
+     * @Route("/get/{date}/{medecin}", name="app_availability_get", methods={"GET"})
+     */
+    public function getAvailabilities(AvailabilityRepository $repo,$date,$medecin): Response{
+
+        $First_date = date_create("$date this week")->format('Y-m-d H:i:s');
+        $Last_date = date_create("$date this week +5 days")->format('Y-m-d H:i:s');
+        $ava = $repo->findAvailability($First_date,$Last_date,$medecin);
+        return $this->render('rendez_vous/_table_availability.html.twig', [
+            'selectedDay' => $date,
+            'availabilities'=>$ava
+        ]);
+    }      
+
+    /**
+     * @Route("/ajouter", name="app_rendez_vous_new", methods={"GET", "POST"})
      */
     public function new(Request $request, RendezVousRepository $rendezVousRepository): Response
     {
@@ -57,7 +73,7 @@ class RendezVousController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="app_rendez_vous_edit", methods={"GET", "POST"})
+     * @Route("/{id}/modifier", name="app_rendez_vous_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, RendezVous $rendezVou, RendezVousRepository $rendezVousRepository): Response
     {

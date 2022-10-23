@@ -64,9 +64,15 @@ class Medecin
      */
     private $rendezVouses;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Availability::class, mappedBy="medecin")
+     */
+    private $availabilities;
+
     public function __construct()
     {
         $this->rendezVouses = new ArrayCollection();
+        $this->availabilities = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -194,6 +200,36 @@ class Medecin
             // set the owning side to null (unless already changed)
             if ($rendezVouse->getMedecin() === $this) {
                 $rendezVouse->setMedecin(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Availability>
+     */
+    public function getAvailabilities(): Collection
+    {
+        return $this->availabilities;
+    }
+
+    public function addAvailability(Availability $availability): self
+    {
+        if (!$this->availabilities->contains($availability)) {
+            $this->availabilities[] = $availability;
+            $availability->setMedecin($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAvailability(Availability $availability): self
+    {
+        if ($this->availabilities->removeElement($availability)) {
+            // set the owning side to null (unless already changed)
+            if ($availability->getMedecin() === $this) {
+                $availability->setMedecin(null);
             }
         }
 

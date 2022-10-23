@@ -4,7 +4,7 @@ main {
 footer {
     padding: 26px;
     text-align: center;
-    background: #404345;
+    background: #222222fa;
     color: #fff;
     font-weight: 600;
 }
@@ -13,4 +13,12 @@ footer {
     margin-top: 50px;
 }
 
+.abled{
+    color: #00bcd4;
+    font-weight: 900;
+    cursor: pointer;
+}
 
+.disabled{
+    color: rgb(139, 139, 139);
+}
