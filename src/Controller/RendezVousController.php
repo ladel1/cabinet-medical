@@ -30,14 +30,16 @@ class RendezVousController extends AbstractController
     /**
      * @Route("/get/{date}/{medecin}", name="app_availability_get", methods={"GET"})
      */
-    public function getAvailabilities(AvailabilityRepository $repo,$date,$medecin): Response{
+    public function getAvailabilities(AvailabilityRepository $repo,RendezVousRepository $rendezVousRepository,$date,$medecin): Response{
 
         $First_date = date_create("$date this week")->format('Y-m-d H:i:s');
         $Last_date = date_create("$date this week +5 days")->format('Y-m-d H:i:s');
+        $rdvs = $rendezVousRepository->findByCostum($First_date,$Last_date,$medecin);
         $ava = $repo->findAvailability($First_date,$Last_date,$medecin);
         return $this->render('rendez_vous/_table_availability.html.twig', [
             'selectedDay' => $date,
-            'availabilities'=>$ava
+            'availabilities'=>$ava,
+            "rdvs"=>$rdvs
         ]);
     }      
 
