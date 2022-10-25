@@ -39,18 +39,20 @@ class RendezVousRepository extends ServiceEntityRepository
         }
     }
 
-   public function findByCostum($first,$last,$medecin): array
+   public function findByParams($medecin,$dates=array()): array
    {
-        return $this->createQueryBuilder('r')
-                    ->andWhere('r.dateDebut >= :first')
-                    ->andWhere('r.dateDebut <= :last')
-                    ->andWhere('r.medecin = :med')
-                    ->setParameter('first', $first)
-                    ->setParameter('last', $last)
-                    ->setParameter('med',$medecin)
-                    ->getQuery()
-                    ->getResult();
+       return $this->createQueryBuilder('r')
+           ->andWhere('r.medecin = :med')
+           ->andWhere('r.dateDebut >= :dateDebut')
+           ->andWhere('r.dateDebut <= :dateFin')
+           ->setParameter('med', $medecin)
+           ->setParameter('dateDebut', $dates["dateDebut"])
+           ->setParameter('dateFin', $dates["dateFin"])
+           ->getQuery()
+           ->getResult()
+       ;
    }
+
 
 //    /**
 //     * @return RendezVous[] Returns an array of RendezVous objects

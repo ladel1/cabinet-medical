@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un Rendez-vous{% endblock %}
+
+{% block content %}
+<div class="row text-center mt-5">
+    <h2>Ajouter un Rendez-vous</h2>
+</div>
+<div class="row mt-5">
+    <div class="col-6 offset-3">
+        {{ form_start(rendezVousForm)}}        
+            {{ form_widget(rendezVousForm)}}
+            <div id="table-dispo" class="mt-5">
+                <div class="alert alert-primary">
+                    Pour avoir les disponibilités sélectionnez un médecin puis une semaine
+                </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Ajouter</button>
+        {{ form_start(rendezVousForm)}}
+    </div>
+</div>
+{% endblock %}
+
+
+{% block javascriptsbody %}
+    <script src="{{asset('js/rendez-vous.js')}}"></script>
+{% endblock %}

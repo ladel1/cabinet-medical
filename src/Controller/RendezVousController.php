@@ -6,103 +6,69 @@ use App\Entity\RendezVous;
 use App\Form\RendezVousType;
 use App\Repository\AvailabilityRepository;
 use App\Repository\RendezVousRepository;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/rendez-vous")
+ * @Route("/rendez-vous", name="app_rendezvous_")
  */
 class RendezVousController extends AbstractController
 {
-
     /**
-     * @Route("/", name="app_rendez_vous_index", methods={"GET"})
+     * @Route("/rendez-vous", name="detail")
      */
-    public function index(RendezVousRepository $rendezVousRepository): Response
+    public function index(): Response
     {
         return $this->render('rendez_vous/index.html.twig', [
-            'rendez_vouses' => $rendezVousRepository->findAll(),
+            'controller_name' => 'RendezVousController',
         ]);
     }
 
     /**
-     * @Route("/get/{date}/{medecin}", name="app_availability_get", methods={"GET"})
+     * @Route("/ajouter", name="add")
      */
-    public function getAvailabilities(AvailabilityRepository $repo,RendezVousRepository $rendezVousRepository,$date,$medecin): Response{
+    public function add(Request $request,RendezVousRepository $rdvRepo): Response
+    {
 
-        $First_date = date_create("$date this week")->format('Y-m-d H:i:s');
-        $Last_date = date_create("$date this week +5 days")->format('Y-m-d H:i:s');
-        $rdvs = $rendezVousRepository->findByCostum($First_date,$Last_date,$medecin);
-        $ava = $repo->findAvailability($First_date,$Last_date,$medecin);
-        return $this->render('rendez_vous/_table_availability.html.twig', [
-            'selectedDay' => $date,
-            'availabilities'=>$ava,
+        $rendezVous = new RendezVous();
+        $rendezVousForm = $this->createForm(RendezVousType::class,$rendezVous);
+        if($request->isMethod("POST")){            
+            $rdv = $request->request->get("rendez_vous");
+            $rdv["dateDebut"] = new DateTime($rdv["dateDebut"]);
+            $request->request->set("rendez_vous", $rdv);
+        }
+        $rendezVousForm->handleRequest($request);
+        if($rendezVousForm->isSubmitted() ){
+            $rendezVous->setDuree(30);
+            $rdvRepo->add($rendezVous,true);
+            return $this->redirectToRoute("app_rendezvous_add");
+        }
+        return $this->render('rendez_vous/add.html.twig', [  
+            "rendezVousForm"=>$rendezVousForm->createView()         
+        ]);
+    }
+
+    /**
+     * @Route("/api/disponibilite/{date}/{medecin}",name="ajax")
+    */
+    public function ajax($date,$medecin,RendezVousRepository $rdvRepo,AvailabilityRepository $avaRepo):Response{
+        $firstDayOfWeek = date_create("$date this week");//->format("Y-md H:i:s");
+        $lastDayOfWeek = date_create("$date this week +5 days");
+        $availabilities = $avaRepo->findAvailability($firstDayOfWeek,$lastDayOfWeek,$medecin);
+        $rdvs = $rdvRepo->findByParams($medecin,array(
+            "dateDebut"=>$firstDayOfWeek,
+            "dateFin"=>$lastDayOfWeek
+        ));
+
+        return $this->render("rendez_vous/_table_disponibility.html.twig",[
+            "selectedDay"=>$date,
+            "firstDayOfWeek"=>$firstDayOfWeek,
+            "availabilities"=>$availabilities,
             "rdvs"=>$rdvs
         ]);
-    }      
-
-    /**
-     * @Route("/ajouter", name="app_rendez_vous_new", methods={"GET", "POST"})
-     */
-    public function new(Request $request, RendezVousRepository $rendezVousRepository): Response
-    {
-        $rendezVou = new RendezVous();
-        $form = $this->createForm(RendezVousType::class, $rendezVou);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $rendezVousRepository->add($rendezVou, true);
-
-            return $this->redirectToRoute('app_rendez_vous_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('rendez_vous/new.html.twig', [
-            'rendez_vou' => $rendezVou,
-            'form' => $form,
-        ]);
     }
 
-    /**
-     * @Route("/{id}", name="app_rendez_vous_show", methods={"GET"})
-     */
-    public function show(RendezVous $rendezVou): Response
-    {
-        return $this->render('rendez_vous/show.html.twig', [
-            'rendez_vou' => $rendezVou,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/modifier", name="app_rendez_vous_edit", methods={"GET", "POST"})
-     */
-    public function edit(Request $request, RendezVous $rendezVou, RendezVousRepository $rendezVousRepository): Response
-    {
-        $form = $this->createForm(RendezVousType::class, $rendezVou);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $rendezVousRepository->add($rendezVou, true);
-
-            return $this->redirectToRoute('app_rendez_vous_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('rendez_vous/edit.html.twig', [
-            'rendez_vou' => $rendezVou,
-            'form' => $form,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="app_rendez_vous_delete", methods={"POST"})
-     */
-    public function delete(Request $request, RendezVous $rendezVou, RendezVousRepository $rendezVousRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$rendezVou->getId(), $request->request->get('_token'))) {
-            $rendezVousRepository->remove($rendezVou, true);
-        }
-
-        return $this->redirectToRoute('app_rendez_vous_index', [], Response::HTTP_SEE_OTHER);
-    }
 }

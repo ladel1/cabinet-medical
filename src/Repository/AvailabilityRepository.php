@@ -40,10 +40,10 @@ class AvailabilityRepository extends ServiceEntityRepository
     }
     
     public function findAvailability($first,$last,$medecin):array{
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.date >= :first')
-            ->andWhere('r.date <= :last')
-            ->andWhere('r.medecin = :med')
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.date >= :first')
+            ->andWhere('a.date <= :last')
+            ->andWhere('a.medecin = :med')
             ->setParameter('first', $first)
             ->setParameter('last', $last)
             ->setParameter('med',$medecin)

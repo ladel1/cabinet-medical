@@ -1,0 +1,75 @@
+{% set jours = ["Lu","Ma","Me","Je","Ve","Sa"] %}
+{% set currentDay = firstDayOfWeek %}
+
+<table class="table mt-5" >
+    <thead>
+        <tr>
+            {% for jour in jours %}
+                <th>
+                    {{jour}} ({{currentDay|date("d/m/Y") }})
+                </th>
+                {% set currentDay = currentDay|date_modify("+1 day")  %}
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% set hour = 59 %}
+        {% set time = 30 %}
+        {% for heure in range(8,19) %}
+            
+            {% set hh = ((heure<10)?"0"~heure:heure)~":00" %}
+            {% set debutHeureViste = hh|format_datetime('none','short',locale='fr') %}
+            {% for part in range(0,hour,time) %}  
+                {% set currentDay = firstDayOfWeek %}              
+                {% set finHeureViste = debutHeureViste|date_modify("+"~time~" minute")|format_datetime('none','short',locale='fr') %}
+                <tr>
+                    {% for jour in jours %}
+                        {% set indexAva = -1 %}
+                        {% set avaHeureDebut = null %}
+                        {% set avaHeureFin = null %}
+                    
+                        {# la liste de disponibilites medecin #}
+                        {% for ava in availabilities %}
+                            {% if ava.date|date("Y-m-d") == currentDay|date("Y-m-d") %}
+                                {% set indexAva = loop.index-1 %}
+                                {% set avaHeureDebut = ava.heureDebut|format_datetime('none','short',locale='fr') %}
+                                {% set avaHeureFin = ava.heureFin|format_datetime('none','short',locale='fr') %}                                                            
+                            {% endif %}
+                        {% endfor %}
+                        {# la liste des rdvs medecin #}
+                        {% set indexRDV = -1 %}
+                        {% set rdvHeureDebut = null %}
+                        {% for rdv in rdvs %}
+                            {% if rdv.dateDebut|date("Y-m-d") == currentDay|date("Y-m-d") %}
+                                {% set indexRDV = loop.index-1 %}
+                                {% set rdvHeureDebut = rdv.dateDebut|format_datetime('none','short',locale='fr') %}                                
+                            {% endif %}
+                        {% endfor %}                        
+
+                        {% if indexAva>=0 and
+                            avaHeureDebut <= debutHeureViste and
+                            avaHeureFin >= finHeureViste                          
+                        %}  
+                            {#  check RDV of medecin  #}
+                            {% if indexRDV >=0 and rdvHeureDebut == debutHeureViste %}
+                                <td class="disabled">
+                                    {{debutHeureViste}}-{{finHeureViste}}
+                                </td>
+                            {% else %}
+                                <td class="abled" data="{{currentDay|date("Y-m-d")}} {{debutHeureViste }}" >
+                                    {{debutHeureViste}}-{{finHeureViste}}
+                                </td>
+                            {% endif %}
+                        {% else %}
+                            <td class="disabled">
+                                {{debutHeureViste}}-{{finHeureViste}}
+                            </td>
+                        {% endif %}
+                        {% set currentDay = currentDay|date_modify("+1 day")  %}
+                    {% endfor %}
+                </tr>
+                {% set debutHeureViste = finHeureViste %}
+            {% endfor %}
+        {% endfor %}
+    </tbody>
+</table>
