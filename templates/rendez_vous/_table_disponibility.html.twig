@@ -40,7 +40,8 @@
                         {% set indexRDV = -1 %}
                         {% set rdvHeureDebut = null %}
                         {% for rdv in rdvs %}
-                            {% if rdv.dateDebut|date("Y-m-d") == currentDay|date("Y-m-d") %}
+                            {% if rdv.dateDebut|date("Y-m-d") == currentDay|date("Y-m-d") and rdv.dateDebut|format_datetime('none','short',locale='fr') == debutHeureViste %}
+                               
                                 {% set indexRDV = loop.index-1 %}
                                 {% set rdvHeureDebut = rdv.dateDebut|format_datetime('none','short',locale='fr') %}                                
                             {% endif %}

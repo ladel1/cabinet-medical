@@ -43,6 +43,7 @@ class RendezVousController extends AbstractController
         $rendezVousForm->handleRequest($request);
         if($rendezVousForm->isSubmitted() ){
             $rendezVous->setDuree(30);
+            $rendezVous->setPatient($this->getUser()->getPatient());
             $rdvRepo->add($rendezVous,true);
             return $this->redirectToRoute("app_rendezvous_add");
         }
@@ -56,7 +57,7 @@ class RendezVousController extends AbstractController
     */
     public function ajax($date,$medecin,RendezVousRepository $rdvRepo,AvailabilityRepository $avaRepo):Response{
         $firstDayOfWeek = date_create("$date this week");//->format("Y-md H:i:s");
-        $lastDayOfWeek = date_create("$date this week +5 days");
+        $lastDayOfWeek = date_create("$date this week +6 days");
         $availabilities = $avaRepo->findAvailability($firstDayOfWeek,$lastDayOfWeek,$medecin);
         $rdvs = $rdvRepo->findByParams($medecin,array(
             "dateDebut"=>$firstDayOfWeek,

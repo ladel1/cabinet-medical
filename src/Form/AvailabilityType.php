@@ -17,10 +17,7 @@ class AvailabilityType extends AbstractType
             ->add('date')
             ->add('heureDebut')
             ->add('heureFin')
-            ->add('medecin',EntityType::class,[
-                'class' => Medecin::class,
-                'choice_label'=> 'nom'
-            ])
+
         ;
     }
 

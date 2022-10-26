@@ -35,6 +35,7 @@ class AvailabilityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $availability->setMedecin($this->getUser()->getMedecin());
             $availabilityRepository->add($availability, true);
 
             return $this->redirectToRoute('app_availability_index', [], Response::HTTP_SEE_OTHER);

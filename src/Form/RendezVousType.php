@@ -17,18 +17,11 @@ class RendezVousType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('dateDebut',HiddenType::class,[])
-            //->add('duree')            
-            
-            ->add('patient',EntityType::class,
-            [ 'class'=>Patient::class,
-            "choice_label"=>function($patient){
-                return $patient->getNom()." ".$patient->getPrenom();
-            }])
+            ->add('dateDebut',HiddenType::class,[])          
             ->add('medecin',EntityType::class,
             [ 'class'=>Medecin::class,
             "choice_label"=>function($medecin){
-                return $medecin->getNom()." ".$medecin->getPrenom();
+                return $medecin->getUser()->getProfil()->getNom()." ".$medecin->getUser()->getProfil()->getPrenom();
             }])
             ->add('description')
             ->add('semaine',TextType::class,[ "mapped"=>false ])
