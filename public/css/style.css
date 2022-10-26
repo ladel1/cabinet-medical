@@ -1,3 +1,8 @@
+.logo {
+    width: 30px;
+    margin-right: 8px;
+}
+
 main {
     min-height: 85vh;
 }
@@ -32,4 +37,8 @@ table td,table th {
 
 table .selected{
     box-shadow: 0px 0px 0px 1px #00bcd4, 0px 0px 0px 3px #00bcd4;
+}
+
+.profil{
+    color: #fff;
 }
