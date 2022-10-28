@@ -20,7 +20,7 @@ class Patient
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity=RendezVous::class, mappedBy="patient")
+     * @ORM\OneToMany(targetEntity=RendezVous::class, mappedBy="patient", fetch="EAGER")
      */
     private $rendezVouses;
 

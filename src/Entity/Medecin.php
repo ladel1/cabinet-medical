@@ -25,7 +25,7 @@ class Medecin
     private $specialite;
 
     /**
-     * @ORM\OneToMany(targetEntity=RendezVous::class, mappedBy="medecin")
+     * @ORM\OneToMany(targetEntity=RendezVous::class, mappedBy="medecin", fetch="EAGER")
      */
     private $rendezVouses;
 

@@ -1,0 +1,64 @@
+{% set rendezvous = null %}
+{% set role = null %}
+{% if app.user.medecin %}
+    {% set rendezvous = app.user.medecin.rendezVouses  %}
+    {% set role = "medecin" %}
+{% endif %}
+{% if app.user.patient %}
+    {% set rendezvous = app.user.patient.rendezVouses %}
+    {% set role = "patient" %}
+{% endif %}
+
+{% extends 'base.html.twig' %}
+{% block title %}Mes rendez-vous{% endblock %}
+
+{% block content %}
+
+<div class="row text-center mt-5">
+    <h1>Mes rendez-vous</h1>
+</div>
+<div class="row mt-5">
+    <div class="col-8 offset-2">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>N°</th>
+                    {% if role == "medecin" %}
+                        <th>Nom patient</th>
+                    {% else %}      
+                        <th>Nom médecin</th>                  
+                    {% endif %}                    
+                    <th>Date rendez-vous</th>
+                    <th>Heure rendez-vous</th>
+                    <th>Duree</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>                
+            </thead>
+            <tbody>
+                {% for item in rendezvous %}
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        {% if role == "medecin" %}
+                            <td>{{ item.patient.user.profil.nom }} {{ item.patient.user.profil.prenom }}</td>
+                        {% else %}      
+                            <td>{{ item.medecin.user.profil.nom }} {{ item.medecin.user.profil.prenom }}</td>                
+                        {% endif %}                                            
+                        <td>{{ item.dateDebut|date("d/m/Y") }}</td>
+                        <td>{{ item.dateDebut|date("h:i") }}</td>
+                        <td>{{ item.duree }}</td>
+                        <td>{{ item.description }}</td>
+                        <td>
+                            <a class="btn btn-primary" href="{{ path('app_rendezvous_detail', {'id': item.id}) }}"><i class="fa-solid fa-eye"></i></a>
+                            <a class="btn btn-danger" href="{{ path('app_rendezvous_remove', {'id': item.id}) }}"><i class="fa-solid fa-trash"></i></a>                            
+                            {% if is_granted("ROLE_MEDECIN") %}
+                                <a class="btn btn-danger" href="{{ path('app_consultation_new', {'id': item.id}) }}"><i class="fa-solid fa-folder"></i></a>                            
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

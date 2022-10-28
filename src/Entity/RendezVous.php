@@ -42,6 +42,11 @@ class RendezVous
      */
     private $medecin;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Consultation::class, inversedBy="rendezVous", cascade={"persist", "remove"})
+     */
+    private $consultation;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -106,4 +111,17 @@ class RendezVous
 
         return $this;
     }
+
+    public function getConsultation(): ?Consultation
+    {
+        return $this->consultation;
+    }
+
+    public function setConsultation(?Consultation $consultation): self
+    {
+        $this->consultation = $consultation;
+
+        return $this;
+    }
+
 }

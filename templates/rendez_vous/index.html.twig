@@ -1,7 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}RendezVous detail{% endblock %}
+{% block title %}Detail Rendez-Vous{% endblock %}
 
 {% block content %}
+<div class="row text-center mt-5">
+    <h1>Detail rendez-vous</h1>
+</div>
+<div class="row mt-5">
+    <div class="col-8 offset-2">
+        <p>Médecin: {{ rendezvous.medecin.user.profil.nom ~" "~ rendezvous.medecin.user.profil.prenom}}</p>
+        <p>Patient: {{ rendezvous.patient.user.profil.nom ~" "~ rendezvous.patient.user.profil.prenom}}</p>
+        <p>Description: {{ rendezvous.description }}</p>
+        <p>Date et heure de rendez-vous:{{ rendezvous.dateDebut| date("d/m/Y H:i") }} </p>
+        <p>Durée: {{ rendezvous.duree }} </p>
+    </div>     
+</div>
+
 
 {% endblock %}

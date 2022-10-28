@@ -18,13 +18,20 @@ use Symfony\Component\Routing\Annotation\Route;
 class RendezVousController extends AbstractController
 {
     /**
-     * @Route("/rendez-vous", name="detail")
+     * @Route("/detail/{id}", name="detail")
      */
-    public function index(): Response
+    public function index(RendezVous $rendezvous): Response
     {
-        return $this->render('rendez_vous/index.html.twig', [
-            'controller_name' => 'RendezVousController',
-        ]);
+        return $this->render('rendez_vous/index.html.twig', compact("rendezvous"));
+    }
+
+    /**
+     * @Route("/remove/{id}", name="remove")
+     */
+    public function remove(RendezVous $rendezvous,RendezVousRepository $repo): Response
+    {
+        $repo->remove($rendezvous,true);
+        return $this->redirectToRoute("app_rendezvous_list");
     }
 
     /**
@@ -70,6 +77,16 @@ class RendezVousController extends AbstractController
             "availabilities"=>$availabilities,
             "rdvs"=>$rdvs
         ]);
+    }
+
+
+
+    /**
+     * @Route("/list",name="list")
+     */
+    public function list(RendezVousRepository $repo):Response{
+     
+        return $this->render("rendez_vous/list.html.twig");
     }
 
 }

@@ -1,6 +1,6 @@
 {% set jours = ["Lu","Ma","Me","Je","Ve","Sa"] %}
 {% set currentDay = firstDayOfWeek %}
-
+{% set today = "now"|date("Y-m-d") %}
 <table class="table mt-5" >
     <thead>
         <tr>
@@ -47,7 +47,7 @@
                             {% endif %}
                         {% endfor %}                        
 
-                        {% if indexAva>=0 and
+                        {% if currentDay|date("Y-m-d") >= today and indexAva>=0 and
                             avaHeureDebut <= debutHeureViste and
                             avaHeureFin >= finHeureViste                          
                         %}  
